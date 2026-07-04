@@ -4,104 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Writing</title>
-    <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-
-body {
-    min-height: 100vh;
-    background: #f4f4f4;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 24px;
-}
-
-.box-wrap {
-    width: 100%;
-    max-width: 900px;
-    display: flex;
-    flex-direction: column;
-}
-
-.page-header {
-    margin-bottom: 18px;
-    color: #222;
-}
-
-.page-kicker {
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: #666;
-    margin-bottom: 8px;
-}
-
-.page-header h1 {
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
-    line-height: 1.1;
-    margin-bottom: 8px;
-}
-
-.page-subtitle {
-    max-width: 60ch;
-    color: #666;
-    line-height: 1.6;
-}
-
-.writing-box {
-    width: 100%;
-    height: 60vh;
-    min-height: 400px;
-    resize: vertical;
-    border: 1px solid #cfcfcf;
-    border-radius: 12px;
-    background: #ffffff;
-    color: #222;
-    font-size: 1rem;
-    line-height: 1.6;
-    padding: 18px;
-    outline: none;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.writing-box::placeholder {
-    color: #888;
-}
-
-.writing-box:focus {
-    border-color: #999;
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
-}
-
-@media (max-width: 640px) {
-    body {
-        padding: 12px;
-    }
-
-    .page-header {
-        margin-bottom: 12px;
-    }
-
-    .page-header h1 {
-        font-size: 1.8rem;
-    }
-
-    .writing-box {
-        height: 50vh;
-        min-height: 300px;
-        padding: 14px;
-        font-size: 0.95rem;
-    }
-}
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="box-wrap">
@@ -110,22 +13,17 @@ body {
             <h1>Write on the web</h1>
             <p class="page-subtitle">A simple place to type, edit, and keep your thoughts in one box.</p>
         </div>
-        <textarea class="writing-box" id="editor" placeholder="Start writing..."></textarea>
+        <textarea class="writing-box" placeholder="Start writing..."></textarea>
     </div>
-    <script>
-        const editor = document.getElementById('editor');
-        
-        // Load text from browser storage
-        window.addEventListener('load', () => {
-            const saved = localStorage.getItem('writing-text');
-            if (saved) {
-                editor.value = saved;
-            }
+    <script src="/socket.io/socket.io.js"></script>
+    <script>        
+        const socket = io();
+        const writingBox = document.querySelector('.writing-box');
+        writingBox.addEventListener('input', () => {
+            socket.emit('editor-change', writingBox.value);
         });
-        
-        // Save text to browser storage
-        editor.addEventListener('input', () => {
-            localStorage.setItem('writing-text', editor.value);
+        socket.on('editor-change', (data) => {
+            writingBox.value = data;
         });
     </script>
 </body>
