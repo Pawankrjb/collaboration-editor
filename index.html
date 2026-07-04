@@ -110,20 +110,23 @@ body {
             <h1>Write on the web</h1>
             <p class="page-subtitle">A simple place to type, edit, and keep your thoughts in one box.</p>
         </div>
-        <textarea class="writing-box" placeholder="Start writing..."></textarea>
+        <textarea class="writing-box" id="editor" placeholder="Start writing..."></textarea>
     </div>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>        
-        const socket = io();
-        const writingBox = document.querySelector('.writing-box');
-        writingBox.addEventListener('input', () => {
-            socket.emit('editor-change', writingBox.value);
+    <script>
+        const editor = document.getElementById('editor');
+        
+        // Load text from browser storage
+        window.addEventListener('load', () => {
+            const saved = localStorage.getItem('writing-text');
+            if (saved) {
+                editor.value = saved;
+            }
         });
-        socket.on('editor-change', (data) => {
-            writingBox.value = data;
+        
+        // Save text to browser storage
+        editor.addEventListener('input', () => {
+            localStorage.setItem('writing-text', editor.value);
         });
-
-
     </script>
 </body>
 </html>
