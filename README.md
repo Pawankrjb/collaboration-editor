@@ -48,6 +48,30 @@ These packages are needed so the app can run properly and support live writing.
 - `index.html` - main page markup
 - `style.css` - styling for the writing box
 
-## Deployment Note
+## Deployment
 
-This project works best on a Node.js hosting platform such as Render, Railway, or a VPS. Vercel is not ideal for the current Socket.IO setup unless the app is restructured.
+### Vercel
+
+1. Connect your GitHub repo to Vercel
+2. Vercel will auto-detect the `vercel.json` config
+3. Click Deploy
+
+Your app will be live at: `https://your-project-name.vercel.app`
+
+### Render or Railway
+
+These platforms work well for full Node.js apps with Socket.IO:
+
+1. Push your code to GitHub
+2. Connect your repo to Render or Railway
+3. Set the start command: `node app.js`
+4. Deploy
+
+### Local Deployment
+
+To run on your own server:
+
+```bash
+npm install
+node app.js
+```
